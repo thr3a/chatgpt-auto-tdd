@@ -67,7 +67,6 @@ ${testResults}
 \`\`\`
 `;
 
-  // ChatGPTにリクエストを送信
   const chatCompletion = await client.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
     model: model
@@ -84,11 +83,9 @@ ${testResults}
 
 async function main(sourcePath: string, testPath: string) {
   while (true) {
-    // ファイルの内容を読み込む
     const sourceCode = await readFile(sourcePath, 'utf-8');
     const testCode = await readFile(testPath, 'utf-8');
 
-    // テストを実行
     const testResults = await runVitest(testPath);
 
     // 全てのテストが成功していれば終了
@@ -97,7 +94,7 @@ async function main(sourcePath: string, testPath: string) {
       break;
     }
 
-    // GPTに解決策を求める
+    // ChatGPTに解決策を求める
     const solution = await fetchGPTSolution(sourceCode, testCode, JSON.stringify(testResults, null, 2));
 
     // 解決策をファイルに書き込む
